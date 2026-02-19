@@ -9,6 +9,7 @@ from asteroid import Asteroid
 from shot import Shot
 def main():
     pygame.init()
+    PYGAME_DETECT_AVX2=1
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}, Screen width: {SCREEN_WIDTH}, Screen height: {SCREEN_HEIGHT}")
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
@@ -34,7 +35,12 @@ def main():
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
-        
+        for asteroid in asteroids:
+            log_event("asteroid_shot")
+            for shot in shots:
+                if shot.collides_with(asteroid):
+                    shot.kill()
+                    asteroid.split()
         for sprite in drawable:
             sprite.draw(screen)
         pygame.display.flip()
